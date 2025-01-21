@@ -30,7 +30,6 @@ export class AuthDto {
   @IsNotEmpty()
   email: string;
 
-  @IsAlphanumeric()
   @IsNotEmpty()
   @MinLength(8, {
     message: 'Password is too short. It must be at least 8 characters long.',
