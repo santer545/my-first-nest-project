@@ -3,26 +3,21 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Req,
-  Res,
+  Param,
+  ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-import { AppService } from './app.service';
-import { Request } from 'express';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  fetchRequest(@Req() req: Request, @Res() res) {
-    const { id } = req.params;
-    const queryParam = req.query;
-    const userAgent = req.headers['user-agent'];
+  fetchRequest(@Param('id', ParseIntPipe) id: number) {
+    return `Fetched ID: ${id}`;
+  }
 
-    return res.send(`<script>
-      console.log('id: ${id}');
-      console.log('queryParam: ${JSON.stringify(queryParam)}');
-      console.log('userAgent: ${userAgent}');</script>`);
+  @Get('pipe/:id')
+  getId(@Param('id', ParseUUIDPipe) id: number) {
+    return `ID: ${id}`;
   }
 }
