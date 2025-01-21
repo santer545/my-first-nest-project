@@ -1,12 +1,23 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  fetchRequest(@Param('id', ParseIntPipe) id: number) {
+    return `Fetched ID: ${id}`;
+  }
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('pipe/:id')
+  getId(@Param('id', ParseUUIDPipe) id: number) {
+    return `ID: ${id}`;
   }
 }
