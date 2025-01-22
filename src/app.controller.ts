@@ -9,12 +9,19 @@ import {
   ParseUUIDPipe,
   Post,
   Req,
+  SetMetadata,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { UserDTO } from './UserDTO/user.dto';
 import { UserService } from './services/user/user.service';
+import { AuthGuard } from './guards/auth/auth.guard';
+import { RolesGuard } from './guards/roles/roles.guard';
+import { Roles } from './customDecorators/roles.decorator';
+import { Role } from './enums/role.enum';
 
+@UseGuards(AuthGuard)
 @Controller()
 export class AppController {
   constructor(private userService: UserService) {}
@@ -40,8 +47,29 @@ export class AppController {
     return this.userService.getAllUsers();
   }
 
-  @Post('users')
-  createUser(@Body() user: UserDTO) {
-    return this.userService.getAllUsers();
+  @Post('create')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  createUser(@Body() userData: any) {
+    this.userService.createUser(userData);
+    return 'User created';
+  }
+
+  @Get('user')
+  @Roles(Role.USER)
+  @UseGuards(RolesGuard)
+  getUser(@Req() req: any) {
+    const apiKey = req.user.apiKey;
+    const user = this.userService.getUser(apiKey);
+
+    if (!user) {
+      return;
+    }
+
+    const { name, email } = user;
+    return {
+      name,
+      email,
+    };
   }
 }

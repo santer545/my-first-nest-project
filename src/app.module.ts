@@ -17,6 +17,8 @@ import { ClientsController } from './clients/clients.controller';
 import { convertMidlleware } from './middleware/convert.middleware';
 import { UserService } from './services/user/user.service';
 import { UserLoggingMiddleware } from './middleware/user-logging/user-logging.middleware';
+import { AuthGuard } from './guards/auth/auth.guard';
+import { RolesGuard } from './guards/roles/roles.guard';
 
 @Module({
   imports: [ProductsModule],
@@ -26,7 +28,7 @@ import { UserLoggingMiddleware } from './middleware/user-logging/user-logging.mi
     AuthController,
     ClientsController,
   ],
-  providers: [AppService, ProductsService, UserService],
+  providers: [AppService, ProductsService, UserService, AuthGuard, RolesGuard],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
