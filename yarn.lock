@@ -942,10 +942,10 @@
     tslib "2.8.1"
     uid "2.0.2"
 
-"@nestjs/platform-express@^11.0.0", "@nestjs/platform-express@^11.0.1":
-  version "11.0.3"
-  resolved "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-11.0.3.tgz"
-  integrity sha512-KFzxOjd7FYOBR3AtUnhbTHi3LdDpMT3sWSNT/DqTD6t/dEfk/FtgCE7ZtNnIuPY1KTvP68BW40VVcwauyvRJwg==
+"@nestjs/platform-express@^11.0.0", "@nestjs/platform-express@^11.0.4":
+  version "11.0.4"
+  resolved "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-11.0.4.tgz"
+  integrity sha512-HqdTJZViPXNrJGp5b4TdTAmCoHk5UdR67FDEYph8cw+FNhdSbvkXcXErpLN3Hh3/WzLrvKDaWQ2gDZS35vKbmw==
   dependencies:
     cors "2.8.5"
     express "5.0.1"
