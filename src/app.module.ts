@@ -19,9 +19,21 @@ import { UserService } from './services/user/user.service';
 import { UserLoggingMiddleware } from './middleware/user-logging/user-logging.middleware';
 import { AuthGuard } from './guards/auth/auth.guard';
 import { RolesGuard } from './guards/roles/roles.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [ProductsModule],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '_kO&businka1000',
+      database: 'nestmysql',
+      synchronize: true,
+    }),
+    ProductsModule,
+  ],
   controllers: [
     AppController,
     ProductsController,
