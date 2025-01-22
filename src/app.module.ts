@@ -20,6 +20,8 @@ import { UserLoggingMiddleware } from './middleware/user-logging/user-logging.mi
 import { AuthGuard } from './guards/auth/auth.guard';
 import { RolesGuard } from './guards/roles/roles.guard';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Product } from './entities/product';
+import { ProductModule } from './products/module/product/product.module';
 
 @Module({
   imports: [
@@ -30,9 +32,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'root',
       password: '_kO&businka1000',
       database: 'nestmysql',
+      entities: [Product],
       synchronize: true,
     }),
     ProductsModule,
+    ProductModule,
   ],
   controllers: [
     AppController,
