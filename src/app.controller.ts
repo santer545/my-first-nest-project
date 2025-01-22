@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseIntPipe,
   ParseUUIDPipe,
@@ -11,6 +12,7 @@ import {
   Req,
   SetMetadata,
   UseGuards,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -20,8 +22,12 @@ import { AuthGuard } from './guards/auth/auth.guard';
 import { RolesGuard } from './guards/roles/roles.guard';
 import { Roles } from './customDecorators/roles.decorator';
 import { Role } from './enums/role.enum';
+import { TestInterceptor } from './interceptors/test/test.interceptor';
+import { ResponseTransformInterceptor } from './interceptors/response-transform/response-transform.interceptor';
+import { UserDataTransformInterceptor } from './interceptors/user-data-transform/user-data-transform.interceptor';
+import { AuthInterceptor } from './interceptors/auth/auth.interceptor';
 
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller()
 export class AppController {
   constructor(private userService: UserService) {}
@@ -48,8 +54,9 @@ export class AppController {
   }
 
   @Post('create')
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
+  // @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  @UseInterceptors(UserDataTransformInterceptor)
   createUser(@Body() userData: any) {
     this.userService.createUser(userData);
     return 'User created';
@@ -71,5 +78,23 @@ export class AppController {
       name,
       email,
     };
+  }
+
+  @Get('all')
+  @UseInterceptors(ResponseTransformInterceptor)
+  getAll() {
+    return { message: 'Response transform Interceptor executed' };
+  }
+
+  @Get(':id')
+  @UseInterceptors(AuthInterceptor, UserDataTransformInterceptor)
+  getData(@Param('id', ParseIntPipe) id: number) {
+    const user = this.userService.findUser(id);
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 }
