@@ -11,29 +11,24 @@ export class ProductService {
   ) {}
 
   async addProduct(newProduct: ProductDTO) {
-    const { productname, price } = newProduct;
-    const product = this.productRepository.create({ productname, price });
-
+    const product = this.productRepository.create(newProduct);
     return await this.productRepository.save(product);
   }
 
-  async getAllProducts() {
+  async getAll() {
     return await this.productRepository.find();
   }
 
-  async getProductById(id: number) {
+  async getOne(id: number) {
     const product = await this.productRepository.findOne({ where: { id } });
-
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
-
     return product;
   }
 
   async updateProduct(id: number, updateData: ProductDTO) {
     const product = await this.productRepository.findOne({ where: { id } });
-
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
@@ -43,11 +38,9 @@ export class ProductService {
 
   async deleteProduct(id: number) {
     const product = await this.productRepository.findOne({ where: { id } });
-
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
-
     return await this.productRepository.remove(product);
   }
 }

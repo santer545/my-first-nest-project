@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>MyStore</title>
+    <link rel="stylesheet" href="../css/home.css">
+  </head>
+  <body>
+    <%- include('./includes/navbar.ejs') %>
+    
+    <div>
+      <div class="pt-3 card-container">
+        <% if (products.length > 0) { %>
+          <% for( let product of products) { %>
+            <div class="card m-3 custom-card">
+                <img src="/uploads/<%= product.image  %>" class="card-img-top card-image" alt= <%=product.productname %>>
+                <div class="card-body">
+                  <div class="name-price-container">
+                    <h3 class="card-title"><%=product.productname  %></h3>
+                    <h4 class="card-title fw-light"><%="$"+product.price  %></h4>
+                  </div>
+
+                  <div>
+                    <a href="/product/getOne/<%= product.id %>" class="btn btn-outline-dark mx-1 mt-4 edit-buttons hover-yellow">
+                      <i class="bi bi-pencil-fill"></i>
+                    </a>
+                    <form action="/product/delete/<%= product.id %>?_method=DELETE" method="post">
+                      <button class="btn btn-outline-dark mx-1 mt-4 edit-buttons hover-red">
+                        <i class="bi bi-trash-fill"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+            </div>
+          <% } %>
+        <% } else {%>
+              <div class="m-5 p-5">
+                <h1 class="display-2 text-muted">No Products Available</h1>
+                <a href="/mystore/add-product" class="btn btn-outline-dark fs-4 my-3">
+                 <i class="bi bi-cart-plus-fill p-1"></i> Add Product
+                </a>
+              </div>
+          <% } %>
+      </div>
+    </div>
+  </body>
+</html>
