@@ -10,11 +10,14 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { nullable: false })
+  @Column({ type: 'varchar', nullable: false })
   productname: string;
 
-  @Column('decimal', { nullable: false })
+  @Column({ type: 'int', nullable: false })
   price: number;
+
+  @Column({ type: 'varchar', length: 255, nullable: false })
+  image: string;
 
   @CreateDateColumn()
   createdAt: Date;
