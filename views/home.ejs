@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="../css/home.css">
   </head>
   <body>
-    <%- include('./includes/navbar.ejs') %>
+    <%- include('./includes/navbar.ejs'), {isLoggedIn: isLoggedIn} %>
     
     <div>
       <div class="pt-3 card-container">
@@ -33,16 +33,18 @@
                     <h4 class="card-title fw-light"><%="$"+product.price  %></h4>
                   </div>
 
-                  <div>
-                    <a href="/product/getOne/<%= product.id %>" class="btn btn-outline-dark mx-1 mt-4 edit-buttons hover-yellow">
-                      <i class="bi bi-pencil-fill"></i>
-                    </a>
-                    <form action="/product/delete/<%= product.id %>?_method=DELETE" method="post">
-                      <button class="btn btn-outline-dark mx-1 mt-4 edit-buttons hover-red">
-                        <i class="bi bi-trash-fill"></i>
-                      </button>
-                    </form>
-                  </div>
+                  <% if (isLoggedIn === 'true') { %>
+                    <div>
+                      <a href="/product/getOne/<%= product.id %>" class="btn btn-outline-dark mx-1 mt-4 edit-buttons hover-yellow">
+                        <i class="bi bi-pencil-fill"></i>
+                      </a>
+                      <form action="/product/delete/<%= product.id %>?_method=DELETE" method="post">
+                        <button class="btn btn-outline-dark mx-1 mt-4 edit-buttons hover-red">
+                          <i class="bi bi-trash-fill"></i>
+                        </button>
+                      </form>
+                    </div>
+                  <% } %>
                 </div>
             </div>
           <% } %>

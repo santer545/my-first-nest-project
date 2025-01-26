@@ -4,24 +4,15 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsController } from './products/products.controller';
-import { ProductsService } from './products/products.service';
-import { ProductsModule } from './products/products.module';
-import { AuthController } from './auth/auth.controller';
-import { LoggingMiddleware } from './middleware/logging.middleware';
-import { TokenMiddleware } from './middleware/token.middleware';
-import { ContentTypeMiddleware } from './middleware/content-type.middleware';
-import { ClientsController } from './clients/clients.controller';
-import { convertMidlleware } from './middleware/convert.middleware';
-import { UserService } from './services/user/user.service';
-import { UserLoggingMiddleware } from './middleware/user-logging/user-logging.middleware';
-import { AuthGuard } from './guards/auth/auth.guard';
-import { RolesGuard } from './guards/roles/roles.guard';
+import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product';
 import { ProductModule } from './products/module/product/product.module';
+import { UserModule } from './users/module/user/user.module';
+import { User } from './entities/user';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthMiddleware } from './middleware/auth/auth.middleware';
 
 @Module({
   imports: [
@@ -32,28 +23,29 @@ import { ProductModule } from './products/module/product/product.module';
       username: 'root',
       password: '_kO&businka1000',
       database: 'nestmysql',
-      entities: [Product],
+      entities: [Product, User],
       synchronize: true,
     }),
-    ProductsModule,
+    JwtModule.register({
+      secret: 'It is a secret.',
+      signOptions: { expiresIn: '60m' },
+    }),
     ProductModule,
+    UserModule,
   ],
-  controllers: [
-    AppController,
-    ProductsController,
-    AuthController,
-    ClientsController,
-  ],
-  providers: [AppService, ProductsService, UserService, AuthGuard, RolesGuard],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      // .apply(LoggingMiddleware, TokenMiddleware, convertMidlleware)
-      // .forRoutes('*')
-      // .apply(ContentTypeMiddleware)
-      // .forRoutes({ path: 'clients/*', method: RequestMethod.GET })
-      .apply(UserLoggingMiddleware)
+      .apply(AuthMiddleware)
+      .exclude(
+        { path: 'user/login', method: RequestMethod.ALL },
+        { path: 'mystore/sign-up', method: RequestMethod.ALL },
+        { path: 'user/logout', method: RequestMethod.ALL },
+        { path: 'user/sign-up', method: RequestMethod.POST },
+      )
       .forRoutes('*');
   }
 }

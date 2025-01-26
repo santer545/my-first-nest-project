@@ -11,10 +11,12 @@ import {
   Put,
   Redirect,
   Render,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
 import { diskStorage } from 'multer';
 import { ProductDTO } from 'src/DTO/product.dto';
 import { Product } from 'src/entities/product';
@@ -26,9 +28,10 @@ export class ProductController {
 
   @Get('getOne/:id')
   @Render('edit-product')
-  async getOne(@Param('id', ParseIntPipe) id: number) {
+  async getOne(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
+    const cookie = req.cookies;
     const product = await this.productService.getOne(id);
-    return { product };
+    return { product, isLoggedIn: cookie.isLoggedIn };
   }
 
   @Post('create')
