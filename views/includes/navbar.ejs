@@ -6,11 +6,33 @@
           <a href="/mystore/home" class="nav-link text-light fs-4 px-3">Home</a>
         </li>
 
-        <li class="nav-item">
-          <a href="/mystore/add-product" class="nav-link text-light fs-4 px-3"
-            >Add Product</a
-          >
-        </li>
+        <% if (isLoggedIn === "true") { %>
+          <li class="nav-item">
+            <a href="/mystore/add-product" class="nav-link text-light fs-4 px-3"
+              >Add Product</a
+            >
+          </li>
+        <% } %>
+      </ul>
+      <ul class="navbar-nav">
+        <% if (isLoggedIn === "true") { %>
+          <li class="nav-item">
+            <a href="/user/logout" class="nav-link text-light fs-4 px-3">
+              <i class="bi bi-box-arrow-in-right fs-5"></i> Logout
+            </a>
+          </li>
+        <% } else {%>
+          <li class="nav-item">
+            <a href="/mystore/sign-up" class="nav-link text-light fs-4 px-3">
+              <i class="bi bi-box-arrow-in-right fs-5"></i> Sign Up
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/user/login" class="nav-link text-light fs-4 px-3">
+              <i class="bi bi-person fs-5"></i> Login
+            </a>
+          </li>
+        <% } %>
       </ul>
     </div>
   </div>
